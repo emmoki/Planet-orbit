@@ -21,11 +21,11 @@ camera.lookAt(0,0,0)
 const control = new OrbitControls(camera, renderer.domElement)
 
 const createLighting = ()=>{
-    const pointLight = new THREE.PointLight("#FFFFFF", 1.5, 100)
+    const pointLight = new THREE.PointLight(0xFFFFFF, 1.5, 100)
     pointLight.position.set(0,0,0)
     pointLight.castShadow = true
 
-    const spotLight = new THREE.SpotLight("#FFFFFF", 5, 50, Math.PI, 1)
+    const spotLight = new THREE.SpotLight(0xFFFFFF, 5, 50, Math.PI, 1)
     spotLight.position.set(0, 21, 10)
     spotLight.castShadow = true
 
@@ -174,7 +174,7 @@ const createText = ()=>{
             height:1,
         })
         const textMaterial = new THREE.MeshBasicMaterial({
-            color: "#E2C886"
+            color: 0xE2C886
         })
         const textMesh = new THREE.Mesh(textGeometry, textMaterial)
         textMesh.position.set(-1,18,0)
@@ -193,6 +193,18 @@ const create3DModel =()=>{
 }
 
 // Skybox Belum
+const createSkyBox =()=>{
+    let skybox = new THREE.CubeTextureLoader().load([
+        "./assets/skybox/left.png",
+        "./assets/skybox/right.png",
+        "./assets/skybox/up.png",
+        "./assets/skybox/down.png",
+        "./assets/skybox/front.png",
+        "./assets/skybox/back.png"
+    ])
+
+    return skybox
+}
 
 createLighting()
 let saturn = createSaturnBall()
@@ -203,7 +215,9 @@ let smallMeteor1 = createSmallMeteor1()
 let smallMeteor2 = createSmallMeteor2()
 let smallMeteor3 = createSmallMeteor3()
 let smallMeteor4 = createSmallMeteor4()
+let universe = createSkyBox()
 
+scene.background = universe
 scene.add(saturn)
 scene.add(saturnRing)
 scene.add(sun)
