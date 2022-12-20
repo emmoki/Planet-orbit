@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {TextGeometry} from "TextGeometry";
 import {FontLoader} from "FontLoader";
 import {GLTFLoader} from "GLTFLoader";
+import {OrbitControls} from "OrbitControls"
 
 var scene, camera, renderer
 
@@ -16,6 +17,8 @@ document.body.append(renderer.domElement)
 camera = new THREE.PerspectiveCamera(fov, aspect,1, 1000)
 camera.position.set(7, 17, 70)
 camera.lookAt(0,0,0)
+
+const control = new OrbitControls(camera, renderer.domElement)
 
 const createLighting = ()=>{
     const pointLight = new THREE.PointLight("#FFFFFF", 1.5, 100)
@@ -44,7 +47,7 @@ const createSaturnBall = ()=>{
     sphereMesh.position.set(15,5,10)
     sphereMesh.receiveShadow=true
 
-    scene.add(sphereMesh)
+    return sphereMesh
 }
 
 const createSaturnRing = ()=>{
@@ -59,7 +62,7 @@ const createSaturnRing = ()=>{
     torusMesh.rotation.set(20,0,0)
     torusMesh.castShadow=true
     
-    scene.add(torusMesh)
+    return torusMesh
 }
 
 const createSun = ()=>{
@@ -74,7 +77,7 @@ const createSun = ()=>{
     sphereMesh.position.set(0,0,0)
     sphereMesh.receiveShadow=true
     
-    scene.add(sphereMesh)
+    return sphereMesh
 }
 
 const createBigMeteor = ()=>{
@@ -91,7 +94,7 @@ const createBigMeteor = ()=>{
     dodecahedronMesh.position.set(-31,5,10)
     dodecahedronMesh.receiveShadow=true
 
-    scene.add(dodecahedronMesh)
+    return dodecahedronMesh
 }
 
 const createSmallMeteor1 = ()=>{
@@ -108,7 +111,7 @@ const createSmallMeteor1 = ()=>{
     dodecahedronMesh.position.set(-31,8,10)
     dodecahedronMesh.receiveShadow=true
 
-    scene.add(dodecahedronMesh)
+    return dodecahedronMesh
 }
 
 const createSmallMeteor2 = ()=>{
@@ -125,7 +128,7 @@ const createSmallMeteor2 = ()=>{
     dodecahedronMesh.position.set(-31,2,10)
     dodecahedronMesh.receiveShadow=true
 
-    scene.add(dodecahedronMesh)
+    return dodecahedronMesh
 }
 
 const createSmallMeteor3 = ()=>{
@@ -142,7 +145,7 @@ const createSmallMeteor3 = ()=>{
     dodecahedronMesh.position.set(-27,7,10)
     dodecahedronMesh.receiveShadow=true
 
-    scene.add(dodecahedronMesh)
+    return dodecahedronMesh
 }
 
 const createSmallMeteor4 = ()=>{
@@ -159,7 +162,7 @@ const createSmallMeteor4 = ()=>{
     dodecahedronMesh.position.set(-28,5,10)
     dodecahedronMesh.receiveShadow=true
 
-    scene.add(dodecahedronMesh)
+    return dodecahedronMesh
 }
 
 const createText = ()=>{
@@ -191,23 +194,42 @@ const create3DModel =()=>{
 
 // Skybox Belum
 
+createLighting()
+let saturn = createSaturnBall()
+let saturnRing = createSaturnRing()
+let sun = createSun()
+let bigMeteor = createBigMeteor()
+let smallMeteor1 = createSmallMeteor1()
+let smallMeteor2 = createSmallMeteor2()
+let smallMeteor3 = createSmallMeteor3()
+let smallMeteor4 = createSmallMeteor4()
+
+scene.add(saturn)
+scene.add(saturnRing)
+scene.add(sun)
+
+sun.add(saturn)
+sun.add(saturnRing)
+sun.add(bigMeteor)
+sun.add(smallMeteor1)
+sun.add(smallMeteor2)
+sun.add(smallMeteor3)
+sun.add(smallMeteor4)
+
+createBigMeteor()
+createSmallMeteor1()
+createSmallMeteor2()
+createSmallMeteor3()
+createSmallMeteor4()
+createText()
+create3DModel()
+
 const render = ()=>{
     requestAnimationFrame(render)
+    saturn.rotation.y+=0.03
+    sun.rotation.y+=0.005
     renderer.shadowMap.enabled = true
     renderer.render(scene, camera)
 }
 
-window.onload = ()=>{
-    createLighting()
-    createSaturnBall()
-    createSaturnRing()
-    createSun()
-    createBigMeteor()
-    createSmallMeteor1()
-    createSmallMeteor2()
-    createSmallMeteor3()
-    createSmallMeteor4()
-    createText()
-    create3DModel()
-    render()
-}
+render()
