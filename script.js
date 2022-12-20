@@ -192,18 +192,21 @@ const create3DModel =()=>{
     })
 }
 
-// Skybox Belum
 const createSkyBox =()=>{
-    let skybox = new THREE.CubeTextureLoader().load([
-        "./assets/skybox/left.png",
-        "./assets/skybox/right.png",
-        "./assets/skybox/up.png",
-        "./assets/skybox/down.png",
-        "./assets/skybox/front.png",
-        "./assets/skybox/back.png"
-    ])
+    const boxGeometry = new THREE.BoxGeometry(1000,1000,1000)
+    const loader = new THREE.TextureLoader()
+    const boxTexture = [
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/left.png"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/right.png"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/up.png"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/down.png"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/front.png"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({map: loader.load("./assets/skybox/back.png"), side: THREE.DoubleSide})
+    ]
+    const boxMesh = new THREE.Mesh(boxGeometry, boxTexture)
+    boxMesh.position.set(0,0,0)
 
-    return skybox
+    return boxMesh
 }
 
 createLighting()
@@ -217,7 +220,7 @@ let smallMeteor3 = createSmallMeteor3()
 let smallMeteor4 = createSmallMeteor4()
 let universe = createSkyBox()
 
-scene.background = universe
+scene.add(universe)
 scene.add(saturn)
 scene.add(saturnRing)
 scene.add(sun)
